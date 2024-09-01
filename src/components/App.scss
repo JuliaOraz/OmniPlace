@@ -1,0 +1,9 @@
+button {
+  background-color: aqua;
+  padding: 10px 20px;
+  margin-right: 10px;
+
+  &:hover {
+    background-color: blue;
+  }
+}
