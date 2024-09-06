@@ -2,6 +2,7 @@ import { ModuleOptions } from "webpack";
 import { BuildOptions } from "./types/types";
 import MiniCssExtractPlugin from "mini-css-extract-plugin"; // - позволяет отдельно генерировать файл css при сборке
 import ReactRefreshTypeScript from "react-refresh-typescript";
+import { buildBabelLoader } from "./babel/buildBabelLoader";
 
 export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
   const isDev = options.mode === "development";
@@ -27,23 +28,25 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
     ],
   };
 
-  const tsLoader = {
-    //ts loader умеет работать с JSX
-    // Если бы мы не использовали type script, то нужен был бы babel-loader
-    test: /\.tsx?$/,
-    use: [
-      {
-        loader: "ts-loader",
-        options: {
-          transpileOnly: true, //ускоряет компиляцию за счет остановки проверки типов
-          getCustomTransformers: () => ({
-            before: [isDev && ReactRefreshTypeScript()].filter(Boolean),
-          }), // для автоматической перезагрузки
-        },
-      },
-    ],
-    exclude: /node_modules/,
-  };
+  // const tsLoader = {
+  //   //ts loader умеет работать с JSX
+  //   // Если бы мы не использовали type script, то нужен был бы babel-loader
+  //   test: /\.tsx?$/,
+  //   use: [
+  //     {
+  //       loader: "ts-loader",
+  //       options: {
+  //         transpileOnly: true, //ускоряет компиляцию за счет остановки проверки типов
+  //         getCustomTransformers: () => ({
+  //           before: [isDev && ReactRefreshTypeScript()].filter(Boolean),
+  //         }), // для автоматической перезагрузки
+  //       },
+  //     },
+  //   ],
+  //   exclude: /node_modules/,
+  // };
+
+  const babelLoader = buildBabelLoader(options);
 
   const assetLoader = {
     test: /\.(png|jpg|jpeg|gif)$/i,
@@ -72,5 +75,5 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
     ],
   };
 
-  return [scssLoader, tsLoader, assetLoader, svgrLoader];
+  return [scssLoader, babelLoader, assetLoader, svgrLoader];
 }

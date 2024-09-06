@@ -46,7 +46,7 @@ export function buildPlagins({
       })
     );
     plugins.push(
-      // Позволяет компилировать файлы в папку public - из указанной папки в указанную
+      // Позволяет компилировать файлы в папку build - из указанной папки в указанную
       new CopyPlugin({
         patterns: [
           {
