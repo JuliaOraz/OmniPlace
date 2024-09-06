@@ -1,6 +1,7 @@
 import { ModuleOptions } from "webpack";
 import { BuildOptions } from "./types/types";
 import MiniCssExtractPlugin from "mini-css-extract-plugin"; // - позволяет отдельно генерировать файл css при сборке
+import ReactRefreshTypeScript from "react-refresh-typescript";
 
 export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
   const isDev = options.mode === "development";
@@ -27,8 +28,20 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
   };
 
   const tsLoader = {
+    //ts loader умеет работать с JSX
+    // Если бы мы не использовали type script, то нужен был бы babel-loader
     test: /\.tsx?$/,
-    use: "ts-loader",
+    use: [
+      {
+        loader: "ts-loader",
+        options: {
+          transpileOnly: true, //ускоряет компиляцию за счет остановки проверки типов
+          getCustomTransformers: () => ({
+            before: [isDev && ReactRefreshTypeScript()].filter(Boolean),
+          }), // для автоматической перезагрузки
+        },
+      },
+    ],
     exclude: /node_modules/,
   };
 

@@ -7,13 +7,13 @@ import imageJpg from "@/assets/p.jpg";
 import StarSvg from "@/assets/star.svg";
 
 // TREE SHAKING
-function TODO() {
+function TODO(a: number) {
   console.log("TODOFUNCTION");
 } //оптимизация - Тришейкинг
 
 export const App = () => {
   const [count, setCount] = useState<number>(0);
-  TODO();
+
   const increment = () => setCount((prev) => prev + 1);
   const decrement = () => setCount((prev) => prev - 1);
 
@@ -33,7 +33,7 @@ export const App = () => {
         <img width={100} height={100} src={imageJpg} alt="" />
       </div>
       <div>
-        <StarSvg style={{ color: "green" }} width={50} height={50} />
+        <StarSvg style={{ color: "red" }} width={50} height={50} />
       </div>
       <Link to={"/about"}>about</Link>
       <br />
